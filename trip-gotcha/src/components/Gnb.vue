@@ -28,7 +28,7 @@ const navItems = computed(() => [
         svg: IconArticle
     },
     {
-        href: "/",
+        href: "/members",
         icon: "myPage",
         svg: IconMyPage
     },

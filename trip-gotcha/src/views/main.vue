@@ -6,6 +6,7 @@ import MobileLayout from "@/components/Layout.vue";
 <template>
     <MobileLayout>
         <div class="grow bg-black"></div>
+        <router-view />
         <GNB />
     </MobileLayout>
 </template>
