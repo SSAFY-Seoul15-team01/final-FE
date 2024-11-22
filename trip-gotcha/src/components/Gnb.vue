@@ -59,14 +59,16 @@ const isActive = (href) => {
 </script>
 
 <template>
-    <div class="sticky bottom-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-sm">
+    <div class="sticky bottom-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-sm z-50">
         <nav class="max-w-screen-md mx-auto px-2">
             <ul class="flex justify-between items-center">
                 <li v-for="({ href, icon, svg }, index) in navItems" :key="`${index}-${icon}`" class="flex-1">
                     <router-link :to="href" class="relative block group">
                         <div class="flex flex-col items-center py-2 transition-all duration-300">
                             <!-- SVG 아이콘을 직접 렌더링 -->
-                            <div class="relative p-2 rounded-lg transition-all duration-300"><component :is="svg"/></div>
+                            <div class="relative p-2 rounded-lg transition-all duration-300">
+                                <component :is="svg" />
+                            </div>
                         </div>
 
                         <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-0.5 transition-all duration-300"
