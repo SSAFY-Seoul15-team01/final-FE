@@ -12,14 +12,16 @@ export const useMemberStore = defineStore("member", {
   }),
 
   actions: {
-    // 멤버 정보 조회 (GET) - 로그인한 사용자의 정보 조회
     fetchMember() {
       this.loading = true;
       this.error = null;
+      console.log("야호")
 
-      axios.get(`${baseUrl}/members`, { withCredentials: true })
+      axios.get(`${baseUrl}/members`, { withCredentials: false })
         .then((response) => {
+          console.log(response.data)
           this.member = response.data;  // 로그인된 멤버 정보 저장
+          this.isAuthenticated = true;
         })
         .catch((err) => {
           this.error = 'Failed to fetch member information';  // 에러 처리
@@ -29,7 +31,6 @@ export const useMemberStore = defineStore("member", {
         });
     },
 
-    // 멤버 정보 수정 (PATCH) - 로그인한 사용자의 정보 수정
     updateMember(memberData) {
       this.loading = true;
       this.error = null;
@@ -46,28 +47,10 @@ export const useMemberStore = defineStore("member", {
         });
     },
 
-    // 로그인 상태 확인 (GET)
-    checkAuthStatus() {
-      this.loading = true;
-      this.error = null;
-
-      axios.get(`${baseUrl}/auth/status`, { withCredentials: true })
-        .then((response) => {
-          this.isAuthenticated = response.data.isAuthenticated; // 로그인 상태
-          if (this.isAuthenticated) {
-            this.member = response.data.member;  // 로그인된 멤버 정보
-          }
-        })
-        .catch((err) => {
-          this.isAuthenticated = false;
-          this.error = 'Failed to check authentication status';  // 에러 처리
-        })
-        .finally(() => {
-          this.loading = false;  // 로딩 상태 종료
-        });
+    login(socialType) {
+      window.location.href = `${baseUrl}/auth/login/${socialType}`;
     },
 
-    // 로그아웃 처리
     logout() {
       this.loading = true;
       this.error = null;
@@ -85,4 +68,8 @@ export const useMemberStore = defineStore("member", {
         });
     },
   },
-});
+},
+{
+  persist: true,
+  },
+);
