@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen w-full bg-gray-50">
+    <div class="min-h-screen w-full bg-gray-50 relative">
         <div class="relative w-full h-screen sm:max-w-[450px] mx-auto bg-white shadow-lg overflow-hidden flex flex-col">
             <!-- 상단 인디케이터 (데스크톱) -->
             <div

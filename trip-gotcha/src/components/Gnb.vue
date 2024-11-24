@@ -59,7 +59,7 @@ const isActive = (href) => {
 </script>
 
 <template>
-    <div class="sticky bottom-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-sm">
+    <div class="z-50 sticky bottom-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-sm">
         <nav class="max-w-screen-md mx-auto px-2">
             <ul class="flex justify-between items-center">
                 <li v-for="({ href, icon, svg }, index) in navItems" :key="`${index}-${icon}`" class="flex-1">
