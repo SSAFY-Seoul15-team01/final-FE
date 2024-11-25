@@ -3,7 +3,8 @@ export default {
     name: "서울",
     x: 120,
     y: 110,
-    href: "/src/assets/svg/.svg",
+    href: "http://localhost:8080/character/test1.svg",
+    // href: "/src/assets/svg/.svg",
   },
   2: {
     name: "인천",
