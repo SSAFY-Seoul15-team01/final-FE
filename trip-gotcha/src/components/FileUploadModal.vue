@@ -1,12 +1,26 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useModalStore } from "@/stores/modal";
+import { useLocationStore } from "@/stores/location";
+import { useAttractionStore } from "@/stores/attraction";
 
 const modalStore = useModalStore();
+const locationStore = useLocationStore();
+const attractionStore = useAttractionStore();
 
 // 파일 상태 관리
 const fileInputRef = ref(null);
 const files = ref([]);
+
+// 선택된 옵션
+const selectedOption = ref(null);
+
+// 관광지 데이터를 가져오는 함수
+const fetchAttractions = async () => {
+    // 예시로 현재 위치를 가져온 후, 그 위치를 바탕으로 가까운 관광지 정보를 요청할 수 있습니다.
+    const cursorId = 0; // 초기에는 첫 번째 페이지부터 요청
+    await attractionStore.fetchAttractions(cursorId, locationStore.latitude, locationStore.longitude); // attractions 데이터를 불러옴
+};
 
 // 드래그 앤 드롭 파일 처리
 const handleDrop = (event) => {
@@ -42,12 +56,27 @@ const closeModal = () => {
 const uploadFile = () => {
 
 };
+onBeforeMount(() => {
+    fetchAttractions();
+});
 </script>
 
 <template>
     <div v-if="modalStore.isFileUploadModalOpen"
         class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" @click="closeModal">
         <div class="bg-white rounded-lg p-6 max-w-screen-sm w-full" @click.stop>
+            <!-- 선택지 버튼들 -->
+            <div class="w-full overflow-x-auto flex space-x-4 pb-4 mb-4">
+                <div v-for="(no, title, row, distance) in attractionStore.attractions" :key="row">
+                    <button :class="{
+                        'bg-indigo-600 text-white': selectedOption === no,
+                        'bg-indigo-100 text-indigo-600': selectedOption !== no
+                    }" class="px-4 py-2 rounded-full flex-shrink-0 whitespace-nowrap transition-colors"
+                        @click="selectedOption = no">
+                        {{ title }}
+                    </button>
+                </div>
+            </div>
             <!-- 드래그 앤 드롭 업로드 폼 -->
             <div class="w-full p-6 border-2 border-indigo-500 border-dashed rounded-lg hover:border-indigo-700 transition-colors duration-300"
                 @drop.prevent="handleDrop" @dragover.prevent @click="fileInputRef.click">

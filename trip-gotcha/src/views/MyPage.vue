@@ -1,7 +1,8 @@
 <script setup lang="js">
-import { onUnmounted } from "vue";
+import { onBeforeUnmount } from "vue";
 import { useModalStore } from "@/stores/modal";
 import { useMemberStore } from '@/stores/member';
+import { useLocationStore } from "@/stores/location";
 import LoginModal from "@/components/LoginModal.vue";
 import SettingBtn from "@/components/SettingBtn.vue";
 import CharacterMap from "@/components/CharacterMap.vue";
@@ -9,13 +10,15 @@ import FileUploadModal from "@/components/FileUploadModal.vue";
 
 const modalStore = useModalStore();
 const memberStore = useMemberStore();
+const locationStore = useLocationStore();
 
 // 모달 열기
 const openModal = () => {
+    locationStore.getLocation();
     modalStore.openFileUploadModal();
 };
 
-onUnmounted(() => {
+onBeforeUnmount(() => {
     modalStore.closeFileUploadModal();
 })
 
