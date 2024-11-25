@@ -16,14 +16,12 @@ export const userAreaCharacterStore = defineStore(
       async fetchMemberCharacters(memberId) {
         this.loading = true;
         this.error = null;
-        console.log("야호");
 
         await axios
           .get(`${baseUrl}/area-characters/members/${memberId}`, {
             withCredentials: true,
           })
           .then((response) => {
-            console.log(response.data);
             this.characters = response.data.areaCharacters;
           })
           .catch((err) => {

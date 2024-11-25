@@ -1,20 +1,30 @@
 <script setup lang="js">
-import { ref } from "vue";
+import { onUnmounted } from "vue";
+import { useModalStore } from "@/stores/modal";
 import { useMemberStore } from '@/stores/member';
 import LoginModal from "@/components/LoginModal.vue";
 import SettingBtn from "@/components/SettingBtn.vue";
 import CharacterMap from "@/components/CharacterMap.vue";
 import FileUploadModal from "@/components/FileUploadModal.vue";
 
+const modalStore = useModalStore();
 const memberStore = useMemberStore();
-const openModal = ref(false);
+
+// 모달 열기
+const openModal = () => {
+    modalStore.openFileUploadModal();
+};
+
+onUnmounted(() => {
+    modalStore.closeFileUploadModal();
+})
 
 </script>
 
 <template>
     <div class="flex flex-col items-center p-4 h-screen bg-indigo-50"> <!-- indigo 계열 배경색 적용 -->
 
-        <setting-btn></setting-btn>
+        <setting-btn />
 
         <!-- 프로필 (왼쪽 정렬) -->
         <div v-if="memberStore.member !== null" class="flex items-center justify-start mb-8 w-full mt-12">
@@ -23,14 +33,14 @@ const openModal = ref(false);
             <span class="text-lg font-semibold">{{ memberStore.member.nickname.substr(0, 20) }}</span>
         </div>
 
-        <login-modal></login-modal>
+        <login-modal />
 
-        <character-map></character-map>
+        <character-map />
 
-        <file-upload-modal :isOpen="openModal" @update:isOpen="openModal = $event"></file-upload-modal>
+        <file-upload-modal />
 
         <!-- 여행 인증 버튼 (가로로 길게, indigo 계열 색상 적용) -->
-        <button @click="openModal = true"
+        <button @click="openModal"
             class="w-full bg-indigo-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             여행인증
         </button>

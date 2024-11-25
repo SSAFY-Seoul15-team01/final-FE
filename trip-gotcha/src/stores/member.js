@@ -17,12 +17,10 @@ export const useMemberStore = defineStore(
       async fetchMember() {
         this.loading = true;
         this.error = null;
-        console.log("야호");
 
         await axios
           .get(`${baseUrl}/members`, { withCredentials: true })
           .then((response) => {
-            console.log(response.data);
             this.member = response.data; // 로그인된 멤버 정보 저장
             this.isAuthenticated = true;
             if (this.member.profileUrl === null) {
