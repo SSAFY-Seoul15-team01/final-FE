@@ -1,5 +1,4 @@
 <script setup>
-import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMyArticleStore } from '@/stores/myArticle'
 import Article from './Article.vue';
@@ -7,9 +6,6 @@ import Article from './Article.vue';
 const store = useMyArticleStore()
 const { articles, loading, error } = storeToRefs(store)
 
-onMounted(async () => {
-    await store.fetchMyArticles()
-})
 </script>
 
 <template>

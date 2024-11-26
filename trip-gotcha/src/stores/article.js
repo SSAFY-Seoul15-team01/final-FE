@@ -22,6 +22,7 @@ export const useArticleStore = defineStore('article', {
             article["memberProfile"] = `https://www.gravatar.com/avatar/${article.memberId}?d=identicon&s=40`;
             article.createdAt = article.createdAt.split('T')[0]
         })
+        this.error = null;
       } catch (err) {
         this.error = err.message
       } finally {

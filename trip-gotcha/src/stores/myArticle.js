@@ -11,22 +11,28 @@ export const useMyArticleStore = defineStore('myArticle', {
   }),
 
   actions: {
-    async fetchMyArticles() {
-      this.loading = true
-      try {
-        const response = await axios.get(`${baseURL}/articles/members/${memberId}/sidos/${sidoCode}`, { withCredentials: true })
-        console.log(response.data)
-        this.articles = response.data.articles
-
-        this.articles.map((article) => {
+    fetchMyArticles(memberId, sidoCode) {
+      this.loading = true;
+      
+      axios.get(`${baseURL}/articles/members/${memberId}/sidos/${sidoCode}`, { withCredentials: true })
+        .then((response) => {
+          console.log(response.data);
+          this.articles = response.data.articles;
+  
+          this.articles.map((article) => {
             article["memberProfile"] = `https://www.gravatar.com/avatar/${article.memberId}?d=identicon&s=40`;
-            article.createdAt = article.createdAt.split('T')[0]
+            article.createdAt = article.createdAt.split('T')[0];
+          });
+  
+          this.error = null;
         })
-      } catch (err) {
-        this.error = err.message
-      } finally {
-        this.loading = false
-      }
+        .catch((err) => {
+          this.error = err.message;
+        })
+        .finally(() => {
+          console.log(this.error);
+          this.loading = false;
+        });
     }
   }
 })

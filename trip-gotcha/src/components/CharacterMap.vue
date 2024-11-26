@@ -3,13 +3,14 @@ import { ref, onMounted } from 'vue';
 import * as d3 from 'd3'; // d3 모듈 임포트
 import { useAreaCharacterStore } from '@/stores/areaCharacter'
 import { useMemberStore } from '@/stores/member';
-import { useModalStore } from "@/stores/modal";
+import { useMyArticleStore } from "@/stores/myArticle";
 import charactersInfo from "@/assets/json/charactersInfoJson";
 
 const mapRef = ref(null); // 맵을 참조할 ref
 const areaCharacterStore = useAreaCharacterStore();
 const memberStore = useMemberStore();
-const imageSize = 50;
+const myArticleStore = useMyArticleStore();
+const imageSize = 80;
 
 // 캐릭터 그려주는 함수
 const addCharacter = async (memberCharacters) => {
@@ -37,10 +38,33 @@ const addCharacter = async (memberCharacters) => {
         memberCharacters
             .append('image') // image 태그를 사용하여 SVG 아이콘을 추가
             .attr('x', cInfo.x - imageSize / 2) // x 좌표 설정
-            .attr('y', cInfo.y) // y 좌표 설정
+            .attr('y', cInfo.y - imageSize / 4) // y 좌표 설정
             .attr('width', imageSize) // 아이콘 크기 설정
             .attr('height', imageSize) // 아이콘 크기 설정
-            .attr('href', cInfo.href); // 아이콘 파일 경로
+            .attr('href', cInfo.href) // 아이콘 파일 경로
+            .on('click', function (event) {
+                // 클릭 이벤트 리스너 추가
+                myArticleStore.fetchMyArticles(memberStore.member.id, ch.sidoId)
+                console.log('Character clicked:', cInfo.name);
+            })
+            .on('mouseenter', function () {
+                // 마우스 올리기: 이미지 크기 확대
+                d3.select(this)
+                    .transition() // 트랜지션 적용
+                    .duration(200) // 트랜지션 시간
+                    .attr('width', imageSize * 1.1) // 크기 확대
+                    .attr('height', imageSize * 1.1) // 크기 확대
+                    .attr('x', cInfo.x - (imageSize * 1.1) / 2) // 확대된 크기에 맞게 x 조정
+            })
+            .on('mouseleave', function () {
+                // 마우스 떠나기: 이미지 원래 크기로 복귀
+                d3.select(this)
+                    .transition() // 트랜지션 적용
+                    .duration(200) // 트랜지션 시간
+                    .attr('width', imageSize) // 원래 크기
+                    .attr('height', imageSize) // 원래 크기
+                    .attr('x', cInfo.x - imageSize / 2) // 원래 크기에 맞게 x 조정
+            });
     });
 
 }

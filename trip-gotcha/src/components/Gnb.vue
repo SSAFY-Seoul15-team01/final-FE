@@ -13,7 +13,7 @@ const route = useRoute();
 // 네비게이션 아이템을 computed로 변경하여 동적 처리
 const navItems = computed(() => [
     {
-        href: "/",
+        href: "/home",
         icon: "map",
         svg: IconMap
     },
@@ -54,7 +54,7 @@ const isActive = (href) => {
     if (href === "/mobile") {
         return currentPage.value === href || currentPage.value === "/mobile/";
     }
-    return currentPage.value.startsWith(href);
+    return currentPage.value.startsWith(href) && href !== "/";
 };
 </script>
 

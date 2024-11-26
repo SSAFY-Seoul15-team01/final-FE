@@ -6,7 +6,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: '/',
+      redirect: '/home', // '/' 경로로 가면 '/home'으로 리다이렉트
+    },
+    {
+      path: "/home",
       name: "home",
       component: HomeView,
     },
