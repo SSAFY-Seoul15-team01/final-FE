@@ -15,6 +15,7 @@ export const useAttractionStore = defineStore(
 
     actions: {
       async fetchAttractions(cursorId, lat, lng) {
+        console.log(lat, lng);
         this.loading = true;
         this.error = null;
 

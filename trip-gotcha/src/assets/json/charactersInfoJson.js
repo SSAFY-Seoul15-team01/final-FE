@@ -3,7 +3,7 @@ export default {
     name: "서울",
     x: 120,
     y: 110,
-    href: "http://localhost:8080/character/test1.svg",
+    href: "http://localhost:8080/character/seoul.png",
     // href: "/src/assets/svg/.svg",
   },
   2: {
@@ -58,7 +58,7 @@ export default {
     name: "강원",
     x: 300,
     y: 100,
-    href: "/src/assets/svg/.svg",
+    href: "http://localhost:8080/character/gangwondo.png",
   },
   11: {
     name: "충북",
@@ -100,6 +100,6 @@ export default {
     name: "제주",
     x: 50,
     y: 500,
-    href: "/src/assets/svg/.svg",
+    href: "http://localhost:8080/character/jeju.png",
   },
 };
