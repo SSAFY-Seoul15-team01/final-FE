@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
 
         <login-modal />
 
-        <character-map />
+        <character-map :key="modalStore.isFileUploadModalOpen" />
 
         <file-upload-modal />
 

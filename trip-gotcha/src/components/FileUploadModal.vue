@@ -1,25 +1,50 @@
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { useModalStore } from "@/stores/modal";
 import { useLocationStore } from "@/stores/location";
 import { useAttractionStore } from "@/stores/attraction";
+import { useAreaCharacterStore } from "@/stores/areaCharacter";
 
 const modalStore = useModalStore();
 const locationStore = useLocationStore();
 const attractionStore = useAttractionStore();
+const areaCharacterStore = useAreaCharacterStore();
 
-// 파일 상태 관리
 const fileInputRef = ref(null);
 const files = ref([]);
-
-// 선택된 옵션
 const selectedOption = ref(null);
+// 스크롤 여부를 확인할 flag
+const isScrolling = ref(false);
 
 // 관광지 데이터를 가져오는 함수
 const fetchAttractions = async () => {
-    // 예시로 현재 위치를 가져온 후, 그 위치를 바탕으로 가까운 관광지 정보를 요청할 수 있습니다.
-    const cursorId = 0; // 초기에는 첫 번째 페이지부터 요청
+    const cursorId = attractionStore.lastId || 0;
     await attractionStore.fetchAttractions(cursorId, locationStore.latitude, locationStore.longitude); // attractions 데이터를 불러옴
+};
+// 가로 스크롤 감지 함수
+const handleScroll = (event) => {
+    const container = event.target;
+    const rightEnd = container.scrollWidth === container.scrollLeft + container.clientWidth;
+
+    if (rightEnd && !isScrolling.value) {
+        // 끝에 도달하면 isScrolling을 true로 설정하여 중복 요청을 방지
+        isScrolling.value = true;
+
+        // 새로운 관광지 데이터를 불러옴
+        fetchAttractions().finally(() => {
+            // 데이터 요청 후에는 isScrolling을 다시 false로 설정
+            isScrolling.value = false;
+        });
+    }
+};
+
+// 마우스 휠로 가로 스크롤 조작
+const handleWheel = (event) => {
+    const container = event.target;
+    if (event.deltaY !== 0) {
+        event.preventDefault(); // 기본 세로 스크롤 동작 방지
+        container.scrollLeft += event.deltaY; // 세로 휠 이동량을 가로 스크롤로 변경
+    }
 };
 
 // 드래그 앤 드롭 파일 처리
@@ -54,10 +79,19 @@ const closeModal = () => {
 };
 
 const uploadFile = () => {
-
+    areaCharacterStore.uploadFile(files.value[0], selectedOption.value)
+    closeModal();
 };
-onBeforeMount(() => {
-    fetchAttractions();
+
+watch(() => modalStore.isFileUploadModalOpen, async (newValue, oldValue) => {
+    if (newValue) {
+        // 모달이 열릴 때 관광지 데이터 불러오기
+        await fetchAttractions();
+    } else {
+        attractionStore.attractions = [];
+        attractionStore.lastId = null;
+        selectedOption.value = null;
+    }
 });
 </script>
 
@@ -66,14 +100,15 @@ onBeforeMount(() => {
         class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" @click="closeModal">
         <div class="bg-white rounded-lg p-6 max-w-screen-sm w-full" @click.stop>
             <!-- 선택지 버튼들 -->
-            <div class="w-full overflow-x-auto flex space-x-4 pb-4 mb-4">
-                <div v-for="(no, title, row, distance) in attractionStore.attractions" :key="row">
+            <div class="w-full overflow-x-auto flex space-x-4 pb-4 mb-4" @wheel="handleWheel" @scroll="handleScroll"
+                style="max-height: 300px; overflow-x: auto;">
+                <div v-for="attraction in attractionStore.attractions" :key="attraction.row">
                     <button :class="{
-                        'bg-indigo-600 text-white': selectedOption === no,
-                        'bg-indigo-100 text-indigo-600': selectedOption !== no
+                        'bg-indigo-600 text-white': selectedOption === attraction.no,
+                        'bg-indigo-100 text-indigo-600': selectedOption !== attraction.no
                     }" class="px-4 py-2 rounded-full flex-shrink-0 whitespace-nowrap transition-colors"
-                        @click="selectedOption = no">
-                        {{ title }}
+                        @click="selectedOption = attraction.no">
+                        {{ attraction.title }}
                     </button>
                 </div>
             </div>

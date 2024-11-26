@@ -8,31 +8,27 @@ export const useAttractionStore = defineStore(
   {
     state: () => ({
       attractions: [],
+      lastId: null,
       loading: false, // 로딩 상태
       error: null, // 에러 상태
     }),
 
     actions: {
       async fetchAttractions(cursorId, lat, lng) {
-        console.log(lat, lng)
         this.loading = true;
         this.error = null;
 
-        await axios({
-            method: 'get',
-            url: `${baseUrl}/attractions`,
-            params: {
-              cursorId: cursorId,
-            },
-            data: {
-              latitude: lat,
-              longitude: lng,
-            },
-            withCredentials: true,
-          })
+        await axios
+          .get(
+            `${baseUrl}/attractions?latitude=${lat}&longitude=${lng}&cursorId=${cursorId}`,
+            { withCredentials: true }
+          )
           .then((response) => {
-            this.attractions = response.data.attractions;
-            console.log(this.attractions)
+            this.attractions = [
+              ...this.attractions,
+              ...response.data.attractions,
+            ];
+            this.lastId = response.data.lastId;
           })
           .catch((err) => {
             this.error = "Failed to fetch attractions"; // 에러 처리

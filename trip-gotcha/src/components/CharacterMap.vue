@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import * as d3 from 'd3'; // d3 모듈 임포트
-import { userAreaCharacterStore } from '@/stores/areaCharacter'
+import { useAreaCharacterStore } from '@/stores/areaCharacter'
 import { useMemberStore } from '@/stores/member';
+import { useModalStore } from "@/stores/modal";
 import charactersInfo from "@/assets/json/charactersInfoJson";
 
 const mapRef = ref(null); // 맵을 참조할 ref
-const areaCharacterStore = userAreaCharacterStore();
+const areaCharacterStore = useAreaCharacterStore();
 const memberStore = useMemberStore();
 const imageSize = 50;
 
