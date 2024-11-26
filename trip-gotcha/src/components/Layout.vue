@@ -1,11 +1,6 @@
 <template>
-    <div class="min-h-screen w-full bg-gray-50">
+    <div class="min-h-screen w-full bg-gray-50 relative">
         <div class="relative w-full h-screen sm:max-w-[450px] mx-auto bg-white shadow-lg overflow-hidden flex flex-col">
-            <!-- 상단 인디케이터 (데스크톱) -->
-            <div
-                class="hidden sm:block absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-gray-200/80 rounded-full mt-3 z-50">
-            </div>
-
             <!-- 메인 컨텐츠 -->
             <div class="relative flex-1 overflow-hidden flex flex-col">
                 <slot />
