@@ -9,13 +9,11 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
-      children: [
-        {
-          path: "members",
-          name: "MyPage",
-          component: MyPageView,
-        },
-      ],
+    },
+    {
+      path: "/members",
+      name: "MyPage",
+      component: MyPageView,
     },
   ],
 });
