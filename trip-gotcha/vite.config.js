@@ -4,6 +4,10 @@ import autoprefixer from "autoprefixer";
 import tailwind from "tailwindcss";
 import { defineConfig } from "vite";
 import svgLoader from "vite-svg-loader";
+
+import dns from "node:dns";
+
+dns.setDefaultResultOrder("verbatim");
 // https://vite.dev/config/
 export default defineConfig({
   css: {
@@ -11,10 +15,7 @@ export default defineConfig({
       plugins: [tailwind(), autoprefixer()],
     },
   },
-  plugins: [
-    vue(),
-    svgLoader(),
-  ],
+  plugins: [vue(), svgLoader()],
 
   resolve: {
     alias: {
